@@ -84,7 +84,7 @@ function parseData() {
     const r = hktRows[i]; if (!r) continue;
     const _device = r[3] ? String(r[3]).trim() : null;
     const _qty = typeof r[6]==='number' ? r[6] : 0;
-    const _mig = typeof r[15]==='number' ? r[15] : 0;
+    const _mig = typeof r[15]==='number' ? r[15] : (typeof r[15]==='string' ? parseFloat(r[15])||0 : 0);
     if (!_device || _qty <= 0) continue;
     _preTotal += _qty; _preInstalled += _mig;
     const _instStr = r[10] ? toDate(r[10])?.toISOString().slice(0,10) : (r[20] ? toDate(r[20])?.toISOString().slice(0,10) : null);
@@ -170,7 +170,7 @@ function parseData() {
         dayPlanBySite[site].byDate[helperStr] = (dayPlanBySite[site].byDate[helperStr]||0) + qty;
       }
 
-      const migration = typeof r[15] === 'number' ? r[15] : 0;
+      const migration = typeof r[15] === 'number' ? r[15] : (typeof r[15] === 'string' ? parseFloat(r[15])||0 : 0);
       if (migration > 0) {
         installed += migration; siteMap[site].done += migration; typeMap[dev].done += migration;
         if (cat==='Switch') { instSW+=migration; swInfSiteMap[site].sw_d+=migration; }
@@ -356,7 +356,7 @@ function parseData() {
     if (typeof r[1] !== 'string') continue; // skip rows ที่ col B ไม่ใช่ string
     const room = r[1].trim() || '(ไม่ระบุห้อง)';
     const qty  = typeof r[6]==='number' ? r[6] : 0;
-    const mig  = typeof r[15]==='number' ? r[15] : 0;
+    const mig  = typeof r[15]==='number' ? r[15] : (typeof r[15]==='string' ? parseFloat(r[15])||0 : 0);
     if (qty <= 0) continue;
     if (!locationMap[locSite]) locationMap[locSite] = {};
     if (!locationMap[locSite][room]) locationMap[locSite][room] = {t:0, d:0};
@@ -564,7 +564,7 @@ function parseData() {
         if (qty <= 0) continue;
         const cat  = r[18] ? String(r[18]).trim() : '';
         if (cat === 'AP') continue;
-        const mig  = typeof r[15]==='number' ? r[15] : 0;
+        const mig  = typeof r[15]==='number' ? r[15] : (typeof r[15]==='string' ? parseFloat(r[15])||0 : 0);
         const hDt  = toDate(r[19]);
         if (!hDt) continue;
         const hStr = isoDate(hDt);
